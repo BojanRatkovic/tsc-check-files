@@ -7,6 +7,12 @@
   "bin": {
     "tsc-runner": "dist/index.js"
   },
+  "files": [
+    "dist/",
+    "src/",
+    "README.md",
+    "package.json"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "node dist/index.js test-files/test-1.ts",

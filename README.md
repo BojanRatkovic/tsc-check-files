@@ -220,42 +220,6 @@ $ tsc-runner src/missing.ts
 }
 ```
 
-### GitHub Actions
-
-```yaml
-- name: Type check changed files
-  run: |
-    git diff --name-only --diff-filter=AM HEAD~1 HEAD | \
-    grep -E '\.(ts|tsx|gts|vue)$' | \
-    xargs -r tsc-runner
-```
-
-### VS Code Task
-
-```json
-{
-  "label": "Check Current File",
-  "type": "shell", 
-  "command": "tsc-runner",
-  "args": ["${file}"],
-  "group": "build",
-  "presentation": {
-    "echo": true,
-    "reveal": "always"
-  }
-}
-```
-
-### Makefile
-
-```make
-check-ts:
-	find src -name "*.ts" -o -name "*.tsx" | xargs tsc-runner
-
-check-changed:
-	git diff --name-only --diff-filter=AM | grep '\\.ts$$' | xargs -r tsc-runner
-```
-
 ## Monorepo Support
 
 The tool correctly works in monorepos by:
@@ -272,15 +236,6 @@ tsc-runner Button.tsx  # ✅ Finds root tsconfig.json
 cd ../../../../backend  
 tsc-runner utils.ts     # ✅ Finds backend tsconfig.json
 ```
-
-## Comparison with Alternatives
-
-| Tool | Single File | Respects Config | Auto-detection | Monorepo |
-|------|-------------|-----------------|----------------|----------|
-| `tsc` | ❌ | ✅ | ❌ | ⚠️ |
-| `tsc --noEmit file.ts` | ⚠️ | ❌ | ❌ | ❌ |
-| `glint file.gts` | ❌ | ✅ | ❌ | ⚠️ |
-| **tsc-runner** | ✅ | ✅ | ✅ | ✅ |
 
 ## Troubleshooting
 

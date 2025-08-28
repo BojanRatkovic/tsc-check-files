@@ -1,0 +1,34 @@
+{
+  "name": "tsc-runner",
+  "version": "0.0.1",
+  "description": "TypeScript wrapper for running type checking on specific files while respecting tsconfig.json",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "tsc-runner": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "node dist/index.js test-files/test-1.ts",
+    "dev": "tsc && node dist/index.js test-files/test-1.ts"
+  },
+  "author": "Bojan Ratković",
+  "license": "MIT",
+  "dependencies": {
+    "resolve-from": "^5.0.0"
+  },
+  "peerDependencies": {
+    "typescript": ">=5.0.0",
+    "vue-tsc": ">=2.0.0",
+    "@glint/core": ">=2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "vue-tsc": { "optional": true },
+    "@glint/core": { "optional": true }
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "typescript": "^5.0.0"
+  },
+  "packageManager": "pnpm@9.0.0"
+}

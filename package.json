@@ -1,6 +1,6 @@
 {
   "name": "typescript-file-checker",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Smart TypeScript checker for individual files (while respecting tsconfig.json) or full projects with automatic tool detection (tsc/glint/vue-tsc)",
   "type": "module",
   "main": "dist/index.js",
@@ -20,11 +20,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BojanRatkovic/tsc-check-files.git"
+    "url": "git+https://github.com/BojanRatkovic/typescript-file-checker.git"
   },
-  "homepage": "https://github.com/BojanRatkovic/tsc-check-files#readme",
+  "homepage": "https://github.com/BojanRatkovic/typescript-file-checker#readme",
   "bugs": {
-    "url": "https://github.com/BojanRatkovic/tsc-check-files/issues"
+    "url": "https://github.com/BojanRatkovic/typescript-file-checker/issues"
   },
   "files": [
     "dist/",

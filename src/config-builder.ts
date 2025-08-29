@@ -16,6 +16,7 @@ export async function buildTempTsconfig(files: string[] | null): Promise<TempTsc
   }
 
   const configReadResult = ts.readConfigFile(configFileName, ts.sys.readFile);
+  
   if (configReadResult.error) {
     const errorMessage = ts.formatDiagnostic(configReadResult.error, {
       getCurrentDirectory: () => process.cwd(),

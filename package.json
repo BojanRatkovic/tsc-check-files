@@ -15,8 +15,10 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "node dist/index.js test-files/test-1.ts",
-    "dev": "tsc && node dist/index.js test-files/test-1.ts"
+    "test": "npm run build && node --test test/*.test.js",
+    "test:watch": "npm run build && node --test --watch test/*.test.js",
+    "test:demo": "node dist/index.js test/fixtures/test-file.ts",
+    "dev": "tsc && node dist/index.js test/fixtures/test-file.ts"
   },
   "author": "Bojan Ratković",
   "license": "MIT",

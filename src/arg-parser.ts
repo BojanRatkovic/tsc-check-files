@@ -11,6 +11,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
 
   // Parse explicit project option
   let explicitProject: string | null = null;
+
   for (let i = 0; i < passthrough.length; i++) {
     const arg = passthrough[i];
     
@@ -30,6 +31,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
   
   // Handle --tool=value format
   const toolEqIndex = passthrough.findIndex(arg => arg.startsWith('--tool='));
+
   if (toolEqIndex !== -1) {
     const value = passthrough[toolEqIndex].split('=')[1];
     toolOverride = validateToolValue(value);
@@ -38,6 +40,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
 
   // Handle --tool value format
   const toolIndex = passthrough.findIndex(arg => arg === '--tool');
+  
   if (toolIndex !== -1) {
     const value = passthrough[toolIndex + 1];
     toolOverride = validateToolValue(value);

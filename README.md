@@ -1,10 +1,10 @@
 [![CI](https://github.com/BojanRatkovic/tsc-check-files/actions/workflows/ci.yml/badge.svg)](https://github.com/BojanRatkovic/tsc-check-files/actions/workflows/ci.yml) &nbsp; [![Tests](https://github.com/BojanRatkovic/tsc-check-files/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/BojanRatkovic/tsc-check-files/actions/workflows/test.yml)
 
-# tsc-runner
+# typescript-file-checker
 
-A TypeScript wrapper that enables single-file type checking while respecting your project's `tsconfig.json` configuration. Automatically detects and uses the appropriate tool (`tsc`, `glint`, or `vue-tsc`) based on your project setup and file extensions.
+Smart TypeScript checker for individual files (while respecting tsconfig.json) or full projects with automatic tool detection (tsc/glint/vue-tsc).
 
-## Why tsc-runner?
+## Why typescript-file-checker?
 
 Traditional TypeScript compilers like `tsc` are designed for full project compilation and don't easily support checking individual files while respecting the project's configuration. This tool bridges that gap by:
 
@@ -26,13 +26,13 @@ Install as a development dependency in your project:
 
 ```bash
 # npm
-npm install --save-dev tsc-runner
+npm install --save-dev typescript-file-checker
 
 # yarn
-yarn add --dev tsc-runner
+yarn add --dev typescript-file-checker
 
 # pnpm
-pnpm add --save-dev tsc-runner
+pnpm add --save-dev typescript-file-checker
 ```
 
 ### Peer Dependencies
@@ -56,37 +56,39 @@ pnpm add --save-dev @glint/core
 
 ```bash
 # Check a single TypeScript file
-tsc-runner src/utils/helpers.ts
+typescript-file-checker src/utils/helpers.ts
+# or use short alias:
+tsc-check src/utils/helpers.ts
 
 # Check multiple files
-tsc-runner src/components/Button.tsx src/utils/api.ts
+tsc-check src/components/Button.tsx src/utils/api.ts
 
 # Check Glint template files (Ember.js)
-tsc-runner app/components/my-component.gts
+tsc-check app/components/my-component.gts
 
 # Check Vue files
-tsc-runner src/components/HelloWorld.vue
+tsc-check src/components/HelloWorld.vue
 
 # Full project check (passes through to underlying tool)
-tsc-runner
+tsc-check
 
 # Pass additional TypeScript flags
-tsc-runner src/file.ts --strict --noImplicitAny
+tsc-check src/file.ts --strict --noImplicitAny
 ```
 
 ### Advanced Usage
 
 ```bash
 # Force a specific tool
-tsc-runner --tool=glint app/components/test.gts
-tsc-runner --tool=vue-tsc src/components/App.vue
-tsc-runner --tool=tsc src/utils/helpers.ts
+tsc-check --tool=glint app/components/test.gts
+tsc-check --tool=vue-tsc src/components/App.vue
+tsc-check --tool=tsc src/utils/helpers.ts
 
 # Use explicit project configuration
-tsc-runner --project ./custom-tsconfig.json src/file.ts
+tsc-check --project ./custom-tsconfig.json src/file.ts
 
 # Combine with other tools
-tsc-runner $(git diff --name-only --diff-filter=AM | grep '\\.ts$')
+tsc-check $(git diff --name-only --diff-filter=AM | grep '\\.ts$')
 ```
 
 ## How It Works
@@ -105,7 +107,7 @@ The tool automatically detects which TypeScript checker to use:
 
 ### 2. Configuration Inheritance
 
-When checking specific files, tsc-runner:
+When checking specific files, typescript-file-checker:
 
 1. **Finds your project's `tsconfig.json`** using TypeScript's built-in discovery
 2. **Creates a temporary configuration** that inherits ALL settings from your project
@@ -145,10 +147,10 @@ Force a specific tool when auto-detection isn't sufficient:
 
 ```bash
 # Long form
-tsc-runner --tool=glint src/file.ts
+tsc-check --tool=glint src/file.ts
 
 # Short form  
-tsc-runner --tool glint src/file.ts
+tsc-check --tool glint src/file.ts
 ```
 
 Valid tools: `tsc`, `glint`, `vue-tsc`
@@ -158,8 +160,8 @@ Valid tools: `tsc`, `glint`, `vue-tsc`
 Specify a custom TypeScript configuration:
 
 ```bash
-tsc-runner --project ./tsconfig.build.json src/file.ts
-tsc-runner -p ./configs/strict.json src/file.ts
+tsc-check --project ./tsconfig.build.json src/file.ts
+tsc-check -p ./configs/strict.json src/file.ts
 ```
 
 When using `--project`, no temporary configuration is created - the specified config is used directly.
@@ -187,7 +189,7 @@ This works correctly with all package managers (npm, yarn, pnpm) and handles edg
 ### Missing Dependencies
 
 ```bash
-$ tsc-runner src/file.ts
+$ tsc-check src/file.ts
 Failed to execute "tsc". It doesn't appear to be installed locally.
 Install it in your project (peer dependency) and try again:
   pnpm add -D typescript
@@ -196,14 +198,14 @@ Install it in your project (peer dependency) and try again:
 ### Configuration Errors
 
 ```bash
-$ tsc-runner src/file.ts  
+$ tsc-check src/file.ts  
 Error reading tsconfig.json: Cannot read file 'tsconfig.json'.
 ```
 
 ### File Not Found
 
 ```bash
-$ tsc-runner src/missing.ts
+$ tsc-check src/missing.ts
 # No error - invalid files are filtered out automatically
 ```
 
@@ -214,9 +216,9 @@ $ tsc-runner src/missing.ts
 ```json
 {
   "lint-staged": {
-    "*.{ts,tsx}": ["tsc-runner", "eslint --fix"],
-    "*.gts": ["tsc-runner --tool=glint"],
-    "*.vue": ["tsc-runner --tool=vue-tsc"]
+    "*.{ts,tsx}": ["tsc-check", "eslint --fix"],
+    "*.gts": ["tsc-check --tool=glint"],
+    "*.vue": ["tsc-check --tool=vue-tsc"]
   }
 }
 ```
@@ -232,10 +234,10 @@ The tool correctly works in monorepos by:
 ```bash
 # Works from any subdirectory
 cd packages/frontend/src/components
-tsc-runner Button.tsx  # ✅ Finds root tsconfig.json
+tsc-check Button.tsx  # ✅ Finds root tsconfig.json
 
 cd ../../../../backend  
-tsc-runner utils.ts     # ✅ Finds backend tsconfig.json
+tsc-check utils.ts     # ✅ Finds backend tsconfig.json
 ```
 
 ## Troubleshooting
@@ -276,14 +278,14 @@ Contributions are welcome! Please feel free to submit issues and pull requests.
 
 ```bash
 git clone <repository>
-cd tsc-runner
+cd typescript-file-checker
 pnpm install
 pnpm build
 
 # Test with a sample file
 pnpm test
 # or
-node dist/index.js test-files/test-1.ts
+node dist/index.js test/fixtures/test-file.ts
 ```
 
 ## License

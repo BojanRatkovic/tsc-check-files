@@ -1,15 +1,33 @@
 {
-  "name": "tsc-runner",
-  "version": "0.0.1",
-  "description": "TypeScript wrapper for running type checking on specific files while respecting tsconfig.json",
+  "name": "typescript-file-checker",
+  "version": "0.1.0",
+  "description": "Smart TypeScript checker for individual files (while respecting tsconfig.json) or full projects with automatic tool detection (tsc/glint/vue-tsc)",
   "type": "module",
   "main": "dist/index.js",
   "bin": {
-    "tsc-runner": "dist/index.js"
+    "typescript-file-checker": "dist/index.js",
+    "tsc-check": "dist/index.js"
+  },
+  "keywords": [
+    "typescript",
+    "tsc",
+    "glint",
+    "vue-tsc",
+    "type-checking",
+    "lint-staged",
+    "git-hooks",
+    "ci"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BojanRatkovic/tsc-check-files.git"
+  },
+  "homepage": "https://github.com/BojanRatkovic/tsc-check-files#readme",
+  "bugs": {
+    "url": "https://github.com/BojanRatkovic/tsc-check-files/issues"
   },
   "files": [
     "dist/",
-    "src/",
     "README.md",
     "package.json"
   ],
@@ -18,7 +36,8 @@
     "test": "npm run build && node --test test/*.test.js",
     "test:watch": "npm run build && node --test --watch test/*.test.js",
     "test:demo": "node dist/index.js test/fixtures/test-file.ts",
-    "dev": "tsc && node dist/index.js test/fixtures/test-file.ts"
+    "dev": "tsc && node dist/index.js test/fixtures/test-file.ts",
+    "prepublishOnly": "npm run build && npm test"
   },
   "author": "Bojan Ratković",
   "license": "MIT",

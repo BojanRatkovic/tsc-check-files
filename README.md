@@ -115,13 +115,13 @@ When checking specific files, tsc-runner:
 
 ### 3. Temporary Files
 
-Temporary configurations are created in your project directory (not system temp):
+Temporary configurations are created alongside your existing tsconfig.json:
 
 ```
 your-project/
 ├── tsconfig.json
-├── .tsc-runner/
-│   └── tsconfig.temp.1234567890.json
+├── tsconfig.tsc-runner.1234567890.json  ← temporary config
+├── tsconfig.tsc-runner.shims.d.ts       ← temporary type shims
 └── src/
     └── your-files.ts
 ```
@@ -177,7 +177,6 @@ This works correctly with all package managers (npm, yarn, pnpm) and handles edg
 | Extension | Description | Tool |
 |-----------|-------------|------|
 | `.ts`, `.tsx` | TypeScript files | `tsc` (default) |
-| `.js`, `.jsx` | JavaScript files | `tsc` |
 | `.gts`, `.gjs` | Glint template files (Ember) | `glint` |
 | `.vue` | Vue Single File Components | `vue-tsc` |
 

@@ -1,4 +1,4 @@
-[![CI](https://github.com/BojanRatkovic/tsc-check-files/actions/workflows/ci.yml/badge.svg)](https://github.com/BojanRatkovic/tsc-check-files/actions/workflows/ci.yml) &nbsp;&nbsp; [![Tests](https://github.com/BojanRatkovic/tsc-check-files/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/BojanRatkovic/tsc-check-files/actions/workflows/test.yml)
+[![CI](https://github.com/BojanRatkovic/tsc-check-files/actions/workflows/ci.yml/badge.svg)](https://github.com/BojanRatkovic/tsc-check-files/actions/workflows/ci.yml) &nbsp; [![Tests](https://github.com/BojanRatkovic/tsc-check-files/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/BojanRatkovic/tsc-check-files/actions/workflows/test.yml)
 
 # tsc-runner
 

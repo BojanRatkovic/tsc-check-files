@@ -1,4 +1,4 @@
-[![npm version](https://badge.fury.io/js/typescript-file-checker.svg)](https://www.npmjs.com/package/typescript-file-checker) [![CI](https://github.com/BojanRatkovic/typescript-file-checker/actions/workflows/ci.yml/badge.svg)](https://github.com/BojanRatkovic/typescript-file-checker/actions/workflows/ci.yml) &nbsp; [![Tests](https://github.com/BojanRatkovic/typescript-file-checker/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/BojanRatkovic/typescript-file-checker/actions/workflows/test.yml)
+[![npm version](https://badge.fury.io/js/typescript-file-checker.svg)](https://www.npmjs.com/package/typescript-file-checker) [![CI](https://github.com/BojanRatkovic/typescript-file-checker/actions/workflows/ci.yml/badge.svg)](https://github.com/BojanRatkovic/typescript-file-checker/actions/workflows/ci.yml) [![Tests](https://github.com/BojanRatkovic/typescript-file-checker/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/BojanRatkovic/typescript-file-checker/actions/workflows/test.yml)
 
 # typescript-file-checker
 

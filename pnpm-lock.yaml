@@ -9,7 +9,7 @@ importers:
   .:
     dependencies:
       '@glint/core':
-        specifier: '>=0.9.0'
+        specifier: '>=1.0.0'
         version: 1.5.2(typescript@5.9.2)
       resolve-from:
         specifier: ^5.0.0

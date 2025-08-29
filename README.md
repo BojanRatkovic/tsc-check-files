@@ -1,3 +1,5 @@
+[![CI](https://github.com/BojanRatkovic/tsc-check-files/actions/workflows/ci.yml/badge.svg)](https://github.com/BojanRatkovic/tsc-check-files/actions/workflows/ci.yml) &nbsp;&nbsp; [![Tests](https://github.com/BojanRatkovic/tsc-check-files/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/BojanRatkovic/tsc-check-files/actions/workflows/test.yml)
+
 # tsc-runner
 
 A TypeScript wrapper that enables single-file type checking while respecting your project's `tsconfig.json` configuration. Automatically detects and uses the appropriate tool (`tsc`, `glint`, or `vue-tsc`) based on your project setup and file extensions.

@@ -121,4 +121,65 @@ describe('Config Builder', () => {
       process.chdir(originalCwd);
     }
   });
+
+  test('should find tsconfig.json based on file location in monorepo structure', async () => {
+    // Change to root directory first (simulate running from monorepo root)
+    process.chdir(__dirname);
+
+    try {
+      // Test file in subproject/src/ directory, but tsconfig.json is in subproject/
+      const testFiles = ['monorepo-fixtures/subproject/src/component.ts'];
+      const result = await buildTempTsconfig(testFiles);
+
+      // Should find tsconfig.json in subproject/ directory, not in root
+      const expectedConfigDir = path.join(__dirname, 'monorepo-fixtures', 'subproject');
+      assert.strictEqual(result.configDir, expectedConfigDir, 'Should find tsconfig.json in subproject directory');
+
+      // Verify the config was actually read from the subproject
+      const tempConfig = JSON.parse(fs.readFileSync(result.tempPath, 'utf8'));
+      assert.ok(tempConfig.compilerOptions, 'Should have compiler options from subproject');
+      assert.strictEqual(tempConfig.compilerOptions.target, 'ES2020', 'Should have subproject target setting');
+
+      // File path should be relative to the subproject directory
+      assert.ok(tempConfig.files.includes('src/component.ts'), 'Should have relative path from subproject root');
+      
+      result.cleanup();
+    } finally {
+      process.chdir(originalCwd);
+    }
+  });
+
+  test('should fall back to process.cwd() when no files are provided', async () => {
+    process.chdir(fixturesDir);
+
+    try {
+      // No files provided - should use process.cwd() for tsconfig search
+      const result = await buildTempTsconfig(null);
+
+      // Should find tsconfig.json in current directory (fixtures)
+      assert.strictEqual(result.configDir, fixturesDir, 'Should use process.cwd() when no files provided');
+      
+      result.cleanup();
+    } finally {
+      process.chdir(originalCwd);
+    }
+  });
+
+  test('should handle absolute file paths from different starting directory', async () => {
+    process.chdir(__dirname);
+
+    try {
+      // Absolute path to file in subproject
+      const absoluteFilePath = path.join(__dirname, 'monorepo-fixtures', 'subproject', 'src', 'component.ts');
+      const result = await buildTempTsconfig([absoluteFilePath]);
+
+      // Should still find the subproject tsconfig.json
+      const expectedConfigDir = path.join(__dirname, 'monorepo-fixtures', 'subproject');
+      assert.strictEqual(result.configDir, expectedConfigDir, 'Should find tsconfig.json based on file location');
+      
+      result.cleanup();
+    } finally {
+      process.chdir(originalCwd);
+    }
+  });
 });

@@ -50,7 +50,7 @@ async function main(): Promise<void> {
     configDir = path.dirname(absoluteProject);
   }
 
-  const { command, args } = preferLocalBin(tool);
+  const { command, args } = preferLocalBin(tool, configDir);
   const cmdArgs = [...args, ...finalArgs];
 
   const exit = (code?: number) => {

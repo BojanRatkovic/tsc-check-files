@@ -7,12 +7,20 @@ import { requireTypeScript } from './utils.js';
 export async function buildTempTsconfig(files: string[] | null): Promise<TempTsconfig> {
   const ts = await requireTypeScript();
 
+  // Determine search directory for tsconfig.json
+  let searchDir = process.cwd();
+  if (files && files.length > 0) {
+    // Use the directory of the first file as starting point
+    const firstFile = path.resolve(process.cwd(), files[0]);
+    searchDir = path.dirname(firstFile);
+  }
+
   const configFileName = 
-    ts.findConfigFile(process.cwd(), ts.sys.fileExists, 'tsconfig.json') ||
-    ts.findConfigFile(process.cwd(), ts.sys.fileExists);
+    ts.findConfigFile(searchDir, ts.sys.fileExists, 'tsconfig.json') ||
+    ts.findConfigFile(searchDir, ts.sys.fileExists);
 
   if (!configFileName) {
-    throw new Error(`No tsconfig.json found starting from ${process.cwd()}`);
+    throw new Error(`No tsconfig.json found starting from ${searchDir}`);
   }
 
   const configReadResult = ts.readConfigFile(configFileName, ts.sys.readFile);

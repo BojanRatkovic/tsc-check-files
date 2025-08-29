@@ -32,8 +32,9 @@ export function findNearestPackageJson(startDir: string): string | null {
   return null;
 }
 
-export function resolvePackageBin(pkgName: string, binName?: string): string | null {
-  const pkgJsonPath = resolveFrom.silent?.(process.cwd(), `${pkgName}/package.json`) as string | undefined;
+export function resolvePackageBin(pkgName: string, binName?: string, configDir?: string): string | null {
+  const cwd = configDir || process.cwd();
+  const pkgJsonPath = resolveFrom.silent?.(cwd, `${pkgName}/package.json`) as string | undefined;
   if (!pkgJsonPath) {
     return null;
   }
@@ -63,8 +64,8 @@ export function resolvePackageBin(pkgName: string, binName?: string): string | n
   }
 }
 
-export function preferLocalBin(cmd: Tool): CommandConfig {
-  const cwd = process.cwd();
+export function preferLocalBin(cmd: Tool, configDir?: string): CommandConfig {
+  const cwd = configDir || process.cwd();
   const binExtension = process.platform === 'win32' ? '.cmd' : '';
   const localBinPath = path.join(cwd, 'node_modules', '.bin', cmd + binExtension);
   
@@ -79,7 +80,7 @@ export function preferLocalBin(cmd: Tool): CommandConfig {
   };
 
   const config = toolConfig[cmd];
-  const resolvedBin = resolvePackageBin(config.pkgName, config.binName);
+  const resolvedBin = resolvePackageBin(config.pkgName, config.binName, cwd);
 
   if (resolvedBin) {
     if (/\.(c?m)?jsx?$/.test(resolvedBin)) {

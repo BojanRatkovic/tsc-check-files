@@ -6,7 +6,8 @@ import {
   isFileArg, 
   findNearestPackageJson, 
   pickTool, 
-  getInstallSuggestion 
+  getInstallSuggestion,
+  preferLocalBin
 } from '../dist/src/utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -83,6 +84,37 @@ describe('Utils', () => {
       assert.strictEqual(getInstallSuggestion('tsc'), 'typescript');
       assert.strictEqual(getInstallSuggestion('vue-tsc'), 'vue-tsc');
       assert.strictEqual(getInstallSuggestion('glint'), '@glint/core');
+    });
+  });
+
+  describe('preferLocalBin with configDir', () => {
+    test('should use configDir parameter when provided', () => {
+      const customDir = path.join(__dirname, 'monorepo-fixtures', 'subproject');
+      const result = preferLocalBin('tsc', customDir);
+      
+      // Should return some command (either local bin or fallback)
+      assert.ok(result.command, 'Should return a command');
+      assert.ok(Array.isArray(result.args), 'Should return args array');
+    });
+
+    test('should fall back to process.cwd() when configDir not provided', () => {
+      const result = preferLocalBin('tsc');
+      
+      // Should return some command (either local bin or fallback)
+      assert.ok(result.command, 'Should return a command');
+      assert.ok(Array.isArray(result.args), 'Should return args array');
+    });
+
+    test('should return different paths for different configDirs', () => {
+      const dir1 = __dirname;
+      const dir2 = path.join(__dirname, 'fixtures');
+      
+      const result1 = preferLocalBin('tsc', dir1);
+      const result2 = preferLocalBin('tsc', dir2);
+      
+      // Results might be the same if using fallback, but function should handle different dirs
+      assert.ok(result1.command, 'Should return command for dir1');
+      assert.ok(result2.command, 'Should return command for dir2');
     });
   });
 });

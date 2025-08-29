@@ -11,7 +11,7 @@ Traditional TypeScript compilers like `tsc` are designed for full project compil
 - 🔍 **Single-file checking** - Type check specific files without compiling the entire project
 - ⚙️ **Respects tsconfig.json** - Maintains all your project's TypeScript configuration
 - 🧠 **Smart tool detection** - Automatically chooses between `tsc`, `glint`, or `vue-tsc`
-- 📦 **Monorepo friendly** - Works correctly from any subdirectory
+- 📦 **Monorepo optimized** - Intelligently finds the right `tsconfig.json` and tools based on file location
 - 🚀 **Fast execution** - Only checks what you need, when you need it
 
 Perfect for:
@@ -19,6 +19,7 @@ Perfect for:
 - **IDE integrations** and custom tooling
 - **CI/CD pipelines** that need to check specific changed files
 - **Development workflows** where you want quick feedback on individual files
+- **Monorepo projects** with multiple TypeScript configurations and mixed tooling
 
 ## Installation
 
@@ -109,7 +110,7 @@ The tool automatically detects which TypeScript checker to use:
 
 When checking specific files, typescript-file-checker:
 
-1. **Finds your project's `tsconfig.json`** using TypeScript's built-in discovery
+1. **Finds your project's `tsconfig.json`** using TypeScript's built-in discovery starting from the file's directory
 2. **Creates a temporary configuration** that inherits ALL settings from your project
 3. **Adds the specific files** to the `files` array
 4. **Adjusts compiler options** for type-checking only:
@@ -225,19 +226,63 @@ $ tsc-check src/missing.ts
 
 ## Monorepo Support
 
-The tool correctly works in monorepos by:
+The tool is **fully optimized for monorepos** and intelligently handles complex project structures:
 
-1. **Searching upward** for `package.json` and `tsconfig.json`
-2. **Executing from project root** (where configuration files are located)
-3. **Converting file paths** to be relative to the configuration directory
+### Smart Configuration Discovery
+
+1. **File-based tsconfig.json search** - Starts searching from the file's directory and walks up
+2. **Automatic tool resolution** - Finds the correct TypeScript tool (`tsc`, `glint`, `vue-tsc`) based on the project where the file lives
+3. **Context-aware execution** - Runs tools from the correct project directory with proper dependencies
+
+### Real-World Examples
 
 ```bash
-# Works from any subdirectory
-cd packages/frontend/src/components
-tsc-check Button.tsx  # ✅ Finds root tsconfig.json
+# From monorepo root - works!
+cd my-monorepo/
+tsc-check apps/frontend/src/components/Button.tsx    # Uses apps/frontend/tsconfig.json + glint
+tsc-check packages/shared/src/utils.ts               # Uses packages/shared/tsconfig.json + tsc
+tsc-check apps/backend/src/api/routes.ts             # Uses apps/backend/tsconfig.json + tsc
 
-cd ../../../../backend  
-tsc-check utils.ts     # ✅ Finds backend tsconfig.json
+# From any subdirectory - also works!
+cd apps/frontend/src/components/
+tsc-check Button.tsx                                 # Still finds apps/frontend/tsconfig.json
+
+cd ../../../../packages/shared
+tsc-check src/utils.ts                               # Uses packages/shared/tsconfig.json
+```
+
+### How it works
+
+- **No more "tsconfig.json not found" errors** from monorepo root
+- **Respects each package's unique configuration** (different TypeScript versions, compiler options, tools)
+- **Handles mixed tooling** (tsc in one package, glint in another, vue-tsc in a third)
+- **Works with any monorepo structure** (Lerna, Rush, pnpm workspaces, Yarn workspaces, Turborepo, etc.)
+
+### Complex Monorepo Example
+
+```
+my-monorepo/
+├── package.json                    ← root (no tsconfig.json)
+├── apps/
+│   ├── web-app/
+│   │   ├── tsconfig.json          ← Glint + Ember config
+│   │   └── app/components/Button.gts
+│   └── mobile-app/
+│       ├── tsconfig.json          ← Vue + vue-tsc config  
+│       └── src/components/Screen.vue
+└── packages/
+    ├── ui-library/
+    │   ├── tsconfig.json          ← Standard TypeScript
+    │   └── src/Button.tsx
+    └── shared-utils/
+        ├── tsconfig.json          ← Strict TypeScript config
+        └── src/math.ts
+
+# All of these work from the root:
+tsc-check apps/web-app/app/components/Button.gts      # → glint
+tsc-check apps/mobile-app/src/components/Screen.vue   # → vue-tsc  
+tsc-check packages/ui-library/src/Button.tsx          # → tsc
+tsc-check packages/shared-utils/src/math.ts           # → tsc (strict)
 ```
 
 ## Troubleshooting
